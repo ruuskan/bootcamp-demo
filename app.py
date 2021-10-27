@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, session
 
 app = Flask(__name__)
+
 
 logged = False
 print(logged)
