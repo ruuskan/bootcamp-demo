@@ -1,0 +1,22 @@
+{% extends 'base.html'%}
+
+{% block body %}
+<form method="post" action="/getdata"> 
+    <div class="row mb-3">
+        <div class="col-1"> </div>
+        <div class="col-1">
+            <label for="startDate" class="form-label">Start date</label>
+            <input name="startdate" type="date" class="form-control" id="startdate" aria-describedby="userlHelp">
+        </div>
+        <div class="col-1">
+            <label for="endDate" class="form-label">End date</label>
+            <input name="enddate" type="date" class="form-control" id="enddate" aria-describedby="userlHelp">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-1"> </div>
+        <div class="col-5"> <button type="submit" class="btn btn-primary">Submit</button></div>
+        
+    </div>
+</form>
+{% endblock %}
