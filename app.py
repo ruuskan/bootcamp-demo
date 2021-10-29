@@ -25,8 +25,6 @@ def getdata():
     enddate = datetime.datetime.strptime(request.form['enddate'],'%Y-%m-%d')
     if startdate > enddate:
         startdate,enddate = enddate,startdate
-    print(startdate)
-    print(enddate)
     dfv.handle_data(startdate,enddate)
     return render_template("test2.html", title="Testing2", defdate1 = startdate.strftime('%Y-%m-%d'),defdate2 = enddate.strftime('%Y-%m-%d'))
 

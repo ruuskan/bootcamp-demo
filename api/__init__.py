@@ -7,7 +7,7 @@ def __generate_json(results):
     line = 0
 
     for row in results:
-        r = [row.week, row.year, row.primary, row.secundary, 
+        r = [row.week, row.year, row.primary, row.secondary, 
             row.tertiary, row.share_count, row.share_amount, row.draw_type]
         data.insert(line, r)
         line+=1
@@ -18,7 +18,7 @@ def __generate_json(results):
 
 def get_json(all=True, week = None, year = None):
     if all==True:
-        results = get()
+        results = get_all()
         return __generate_json(results)
     elif (week!=None) & (year!=None):
         results = search_time(search_terms[0],search_terms[1])

@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, text, Column, String, Integer, DateTime
+from sqlalchemy import create_engine, text, Column, String, Integer, DateTime, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
@@ -18,15 +18,16 @@ class Draw(Base):
 
     id = Column(Integer,primary_key=True)
     date = Column(DateTime)
-    primary = Column(String(150))
-    secondary = Column(String(100))
-    tertiary = Column(String(100))
-    share_count = Column(Integer)
-    share_amount = Column(Integer)
-    draw_type = Column(String(100))
+    primary = Column(String(255))
+    secondary = Column(String(255))
+    tertiary = Column(String(255))
+    share_count = Column(String(255))
+    share_amount = Column(String(255))
+    tier_name = Column(String(255))
 
     def __repr__(self):
-        return f"<Draw (type = '{self.draw_type}', week='{self.week}',year='{self.year}')>"
+        return f"<Draw date='{self.date}')>"
+        
 
 DATABASE_URL = os.environ['DATABASE_URL']
 db = create_engine(DATABASE_URL)
