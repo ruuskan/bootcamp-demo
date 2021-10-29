@@ -1,5 +1,35 @@
 {% extends 'base.html'%}
 
-{% block body %} 
-<h1>Data</h1>
+{% block body %}
+
+<div class="container">
+    <h1>Data</h1>
+    <form method="post" action="/getdata">
+
+        <div class="row justify-content-md-center">
+            <div class="col-md-5">
+                <label for="startdate" class="form-label">Start date</label>
+                <input name="startdate" type="date" class="form-control datepicker" id="startdate" value={{ defdate1 }}
+                    min="1971-01-01">
+            </div>
+            <div class="col-md-5">
+                <label for="enddate" class="form-label">End date</label>
+                <input name="enddate" type="date" class="form-control datepicker" id="enddate" value={{ defdate2 }}
+                    min="1971-01-01">
+            </div>
+        </div>
+        <br>
+        <div class="row justify-content-md-center">
+            <div class="col-md-5">
+                <button name="download" type="submit" class="btn btn-primary" value="testi">Download</button>
+                {% if 'loggedin' in session %}
+                <button name="sync" type="submit" class="btn btn-primary">Sync</button>
+                {% endif %}
+            </div>
+            <div class="col-md-5"></div>
+
+        </div>
+    </form>
+</div>
+
 {% endblock %}

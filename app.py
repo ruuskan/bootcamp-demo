@@ -26,13 +26,14 @@ def test2():
 
 @app.route("/getdata", methods=["POST"])
 def getdata():
-    startdate = datetime.datetime.strptime(request.form['startdate'],'%Y-%m-%d')
-    enddate = datetime.datetime.strptime(request.form['enddate'],'%Y-%m-%d')
-    if startdate > enddate:
-        startdate,enddate = enddate,startdate
-    dfv.handle_data(startdate,enddate)
-    return render_template("test2.html", title="Testing2", defdate1 = startdate.strftime('%Y-%m-%d'),defdate2 = enddate.strftime('%Y-%m-%d'))
-
+    if ('loggedin' in session) & ('sync' in request.form):
+        startdate = datetime.datetime.strptime(request.form['startdate'],'%Y-%m-%d')
+        enddate = datetime.datetime.strptime(request.form['enddate'],'%Y-%m-%d')
+        if startdate > enddate:
+            startdate,enddate = enddate,startdate
+        dfv.handle_data(startdate,enddate)
+        return render_template("test2.html", title="Testing2", defdate1 = startdate.strftime('%Y-%m-%d'),defdate2 = enddate.strftime('%Y-%m-%d'))
+    return redirect("/data")
 @app.route("/login")
 def login():
     return render_template("login.html", title="Login")
