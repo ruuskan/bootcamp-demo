@@ -212,4 +212,8 @@ cython_debug/
 
 # End of https://www.toptal.com/developers/gitignore/api/python,flask
 
+# test.py for debugging and testing
 test.py
+
+# pictures that will be generated
+static/pictures/*
