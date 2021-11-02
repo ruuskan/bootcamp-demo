@@ -9,6 +9,7 @@ numpy = "*"
 flask-sqlalchemy = "*"
 python-dotenv = "*"
 requests = "*"
+matplotlib = "*"
 
 [dev-packages]
 

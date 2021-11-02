@@ -5,6 +5,7 @@ from werkzeug.utils import redirect
 import data_from_veikkaus as dfv
 import os
 from dotenv import load_dotenv
+from analysis import data_analysis
 
 app = Flask(__name__)
 app.config['SECRET_KEY']='keepitsecretkeepitsafe'
@@ -12,7 +13,9 @@ load_dotenv()
 
 @app.route("/")
 def welcome():
-    return render_template("index.html", title="Welcome")
+    defdate1 = datetime.datetime.strftime(datetime.datetime.now()-datetime.timedelta(weeks=1),'%Y-%m-%d')
+    defdate2 = datetime.datetime.strftime(datetime.datetime.now(),'%Y-%m-%d')
+    return render_template("index.html", title="Welcome", defdate1 = defdate1, defdate2=defdate2)
 
 @app.route("/test1")
 def test1():
@@ -32,7 +35,7 @@ def getdata():
         if startdate > enddate:
             startdate,enddate = enddate,startdate
         dfv.handle_data(startdate,enddate)
-        return render_template("test2.html", title="Testing2", defdate1 = startdate.strftime('%Y-%m-%d'),defdate2 = enddate.strftime('%Y-%m-%d'))
+        #return render_template("data.html", title="Testing2", defdate1 = startdate.strftime('%Y-%m-%d'),defdate2 = enddate.strftime('%Y-%m-%d'))
     return redirect("/data")
 @app.route("/login")
 def login():
@@ -40,7 +43,9 @@ def login():
 
 @app.route("/data")
 def data():
-    return render_template("data.html", title="Data")
+    defdate1 = datetime.datetime.strftime(datetime.datetime.now()-datetime.timedelta(weeks=1),'%Y-%m-%d')
+    defdate2 = datetime.datetime.strftime(datetime.datetime.now(),'%Y-%m-%d')
+    return render_template("data.html", title="Data", defdate1 = defdate1, defdate2=defdate2)
 
 @app.route("/loginsubmit", methods=["POST", 'GET'])
 def loginsubmit():
@@ -61,6 +66,15 @@ def logout():
 def logoutsubmit():
     session.pop('loggedin',None)
     return redirect('/login')
+
+@app.route("/analyse", methods=["POST"])
+def analyse():
+    startdate = datetime.datetime.strptime(request.form['startdate'],'%Y-%m-%d')
+    enddate = datetime.datetime.strptime(request.form['enddate'],'%Y-%m-%d')
+    if data_analysis(startdate, enddate):
+        session['analysis'] = True
+    return redirect("/")
+
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

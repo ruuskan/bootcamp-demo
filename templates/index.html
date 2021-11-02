@@ -5,7 +5,29 @@
 
 {% block body %}
 
-<h1>Testing index.html</h1>
-<button type="button" class="btn btn-primary">Primary</button>
+<h1>Analyse lottery data</h1>
+
+<form method="post" action="/analyse">
+
+    <div class="row justify-content-md-start">
+        <div class="col-lg-2">
+            <label for="startdate" class="form-label">Start date</label>
+            <input name="startdate" type="date" class="form-control datepicker" id="startdate" value={{ defdate1 }}
+                min="1971-01-01">
+        </div>
+        <div class="col-lg-2">
+            <label for="enddate" class="form-label">End date</label>
+            <input name="enddate" type="date" class="form-control datepicker" id="enddate" value={{ defdate2 }}
+                min="1971-01-01">
+        </div>
+    </div>
+    <br>
+    <div class="row justify-content-md-start">
+        <div class="col-md-4">
+            <button name="select" type="submit" class="btn btn-primary" value="select">Select</button>
+        </div>
+
+    </div>
+</form>
 
 {% endblock body %}
