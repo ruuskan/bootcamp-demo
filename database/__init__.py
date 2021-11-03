@@ -12,7 +12,7 @@ Base = declarative_base()
 class Draw(Base):
     """
     Table object to hold the draws for Finnish lottery
-
+    
     """
     __tablename__ = 'draws'
 

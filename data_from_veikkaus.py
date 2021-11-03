@@ -5,6 +5,15 @@ from database.operations import search_between, insert_row
 
 data_url = 'https://www.veikkaus.fi/api/draw-results/v1/games/LOTTO/draws/by-week/'
 def handle_data(sd, ed):
+    """
+    Return query object
+
+    Get data from Veikkaus and save it in database
+
+    Parameters:
+    sd: datetime.datetime object for starting date
+    ed: datetime.datetime object for ending date
+    """
     data = []
     dt = sd
     tuplelist = __is_data_available(sd,ed)

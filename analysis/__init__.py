@@ -8,6 +8,15 @@ euro_conversion = 5.94573
 euro_start = 2002
 
 def __value_conversion(st_year, comp_year):
+    """
+    Returns float
+
+    Get conversion rate of Finnish currency from starting year and the effective value in comparison year
+
+    Parameters:
+    st_year: int for starting year
+    comp_year: int for comparison year
+    """
     st_year = 2020 if st_year > 2020 else st_year
     comp_year = 2020 if comp_year > 2020 else comp_year
     st_cpi = cpi[cpi[:,0]==st_year,1][0]
@@ -19,6 +28,14 @@ def __value_conversion(st_year, comp_year):
     return conversion_rate
 
 def __array_convert(strarray):
+    """
+    Returns list
+
+    Make stringified arrays (lists) to lists
+
+    Parameters:
+    strarray: stringified array from database
+    """
     if strarray.split('[')[1].split(']')[0] != '':
         arr = [int(el.strip("' ")) for el in strarray.split('[')[1].split(']')[0].split(',')]
     else:
@@ -26,6 +43,14 @@ def __array_convert(strarray):
     return arr
 
 def __data_from_query(query):
+    """
+    Returns dictionary of lists
+
+    Transforms data from database to easier format
+
+    Parameters:
+    query: sqlalchemy query object
+    """
     dates = []
     primary = []
     secondary = []
@@ -48,6 +73,14 @@ def __data_from_query(query):
     return data
 
 def __primary_stats(data):
+    """
+    Returns numpy ndarray
+
+    Get the occurrances of primary numbers in winning lines
+
+    Parameters:
+    data: dictionary of data
+    """
     number_freq = np.zeros((40,40))
     for nums in data['primary']:
         for num1 in nums:
@@ -56,6 +89,12 @@ def __primary_stats(data):
     return (number_freq)
 
 def __heatmap(datamat):
+    """
+    Plotting heatmap
+
+    Parameters:
+    datamat: numpy ndarray object of data to be plotted
+    """
     datamat = np.triu(datamat)
     plt.ioff()
     numbers = [f"{x+1}" for x in range(40)]
@@ -89,6 +128,14 @@ def __heatmap(datamat):
     return True
 
 def __interesting_values(data):
+    """
+    Returns dictionary
+
+    Get interesting values from the data
+
+    Parameters:
+    data: dictionary of data
+    """
     sum_all = 0
     sum_jackpot = 0
     count_jackpot = 0
@@ -98,8 +145,8 @@ def __interesting_values(data):
     biggest_win = 0
     smallest_jackpot = 999999999999
     least_winners = 999999999999
-    first_draw = datetime.datetime.strftime(data['date'][0],'%d/%m/%Y')
-    last_draw = datetime.datetime.strftime(data['date'][-1],'%d/%m/%Y')
+    first_draw = datetime.datetime.strftime(min(data['date']),'%d/%m/%Y')
+    last_draw = datetime.datetime.strftime(max(data['date']),'%d/%m/%Y')
     draw_count = len(data['date'])
     for i in range(len(data['share_count'])):
         sum_jackpot += data['share_amount'][i][0]/100
@@ -123,6 +170,13 @@ def __barplot():
     return True
 
 def data_analysis(dt_start, dt_end):
+    """
+    Returns dictionary of calculated values
+
+    Parameters:
+    dt_start: string formatted starting date
+    dt_end: string formatted ending date
+    """
     res = search_between(dt_start,dt_end)
     data = __data_from_query(res)
     if data['date'] == []:

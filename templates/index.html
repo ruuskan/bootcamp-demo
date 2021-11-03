@@ -53,7 +53,9 @@
 <p>In total, there has been <b>{{ "{:,d}".format(data['count_winner']).replace(',',' ') }}</b> winners when including all of the prize tiers</p>
 <p>Everyone would get  <b>{{ "{:,.2f}".format(data['sum_jackpot']/data['count_winner']).replace(',',' ') }} €</b>, if the prize money were to be distributed eavenly</p>
 <p>There has been <b>{{ "{:,d}".format(data['count_jackpot']).replace(',',' ') }}</b> jackpot winners</p>
+{% if data['count_jackpot']>0 %} 
 <p>Every jackpot winner would get <b>{{ "{:,.2f}".format(data['sum_jackpot']/data['count_jackpot']).replace(',',' ') }} €</b> if the jackpots would be divided equally</p>
+{% endif %}
 <p>In a singe draw the greatest amount of winners has been <b>{{ "{:,d}".format(data['most_winners']).replace(',',' ') }}</b></p>
 <p>The greatest amount of jackpot winners has been <b>{{ "{:,d}".format(data['most_jackpot_winners']).replace(',',' ') }}</b> in a single draw</p>
 <p>The biggest win during the searched time period has been <b>{{ "{:,.2f}".format(data['biggest_win']).replace(',',' ') }} €</b></p>

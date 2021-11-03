@@ -11,6 +11,7 @@ python-dotenv = "*"
 requests = "*"
 matplotlib = "*"
 gunicorn = "*"
+pdoc3 = "*"
 
 [dev-packages]
 

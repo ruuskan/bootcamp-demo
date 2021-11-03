@@ -16,7 +16,6 @@ data = {}
 @app.route("/")
 def welcome():
     global data
-    print("AKJNSDNKJASDKJNASKJNDSAKJNDKJNASKJNDLASKJNDKJNASKJNDAKJNSDKJNASKJNDNAKJSKNDJ")
     if 'dt_start' not in data:
         data['dt_start'] = datetime.datetime.strftime(datetime.datetime.now()-datetime.timedelta(weeks=1),'%Y-%m-%d')
     if 'dt_end' not in data:
@@ -85,8 +84,6 @@ def analyse():
         enddate = datetime.datetime.strptime(request.form['enddate'],'%Y-%m-%d')
         if startdate > enddate:
             startdate,enddate = enddate,startdate
-        print("WOLOLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
-        print(data['dt_start'])
         data['dt_start'] = datetime.datetime.strftime(startdate,'%Y-%m-%d')
         data['dt_end'] = datetime.datetime.strftime(enddate,'%Y-%m-%d')
         data_analysed = data_analysis(startdate, enddate)
