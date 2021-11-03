@@ -8,6 +8,8 @@ euro_conversion = 5.94573
 euro_start = 2002
 
 def __value_conversion(st_year, comp_year):
+    st_year = 2020 if st_year > 2020 else st_year
+    comp_year = 2020 if comp_year > 2020 else comp_year
     st_cpi = cpi[cpi[:,0]==st_year,1][0]
     comp_cpi = cpi[cpi[:,0]==comp_year,1][0]
     st_euro = euro_conversion if st_year < euro_start else 1
@@ -41,13 +43,12 @@ def __data_from_query(query):
         share_amount.append(__array_convert(row.share_amount))
         tiers.append(row.tier_name)
 
-    data = {'date':dates,'primary':primary,'secondary':secondary,'tertiary':tertiary,'share_count':share_count}
+    data = {'date':dates,'primary':primary,'secondary':secondary,'tertiary':tertiary,'share_count':share_count,
+            'share_amount' : share_amount, 'tier_names' : tiers}
     return data
 
 def __primary_stats(data):
-    number_count = [0]*40
     number_freq = np.zeros((40,40))
-    test = 0
     for nums in data['primary']:
         for num1 in nums:
             for num2 in nums:
@@ -55,7 +56,7 @@ def __primary_stats(data):
     return (number_freq)
 
 def __heatmap(datamat):
-
+    datamat = np.triu(datamat)
     plt.ioff()
     numbers = [f"{x+1}" for x in range(40)]
 
@@ -65,13 +66,14 @@ def __heatmap(datamat):
     cbar = ax.figure.colorbar(im, ax=ax)
     cbar.ax.set_ylabel('Counts', rotation=-90, va="bottom")
 
+    ax.xaxis.tick_top()
     ax.set_xticks(np.arange(len(numbers)))
     ax.set_yticks(np.arange(len(numbers)))
 
     ax.set_xticklabels(numbers)
     ax.set_yticklabels(numbers)
 
-    plt.setp(ax.get_xticklabels(), rotation=90, ha="right",va='center',
+    plt.setp(ax.get_xticklabels(), rotation=90, ha="left",va='center',
              rotation_mode="anchor")
 
     # Loop over data dimensions and create text annotations.
@@ -83,7 +85,38 @@ def __heatmap(datamat):
     ax.set_title("Lottery number frequencies with other numbers")
     fig.tight_layout()
     plt.savefig('static/pictures/a_number_frequencies.svg',format='svg')
+    plt.close()
     return True
+
+def __interesting_values(data):
+    sum_all = 0
+    sum_jackpot = 0
+    count_jackpot = 0
+    count_winner = 0
+    most_jackpot_winners = 0
+    most_winners = 0
+    biggest_win = 0
+    smallest_jackpot = 999999999999
+    least_winners = 999999999999
+    first_draw = datetime.datetime.strftime(data['date'][0],'%d/%m/%Y')
+    last_draw = datetime.datetime.strftime(data['date'][-1],'%d/%m/%Y')
+    draw_count = len(data['date'])
+    for i in range(len(data['share_count'])):
+        sum_jackpot += data['share_amount'][i][0]/100
+        count_jackpot += data['share_count'][i][0]
+        most_winners = np.sum(np.array(data['share_count'][i])) if np.sum(np.array(data['share_count'][i])) > most_winners else most_winners
+        most_jackpot_winners = data['share_count'][i][0] if data['share_count'][i][0] > most_jackpot_winners else most_jackpot_winners
+        biggest_win = data['share_amount'][i][0]/100 if data['share_amount'][i][0]/100 > biggest_win else biggest_win
+        smallest_jackpot =  data['share_amount'][i][0]/100 if (data['share_amount'][i][0]/100 < smallest_jackpot) & (data['share_count'][i][0] > 0) else smallest_jackpot
+        least_winners = np.sum(np.array(data['share_count'][i])) if np.sum(np.array(data['share_count'][i])) < least_winners else least_winners
+        for k in range(len(data['share_count'][i])):
+            sum_all += data['share_amount'][i][k]/100 * data['share_count'][i][k]
+            count_winner += data['share_count'][i][k]
+    interesting_values={'sum_all':sum_all,'sum_jackpot':sum_jackpot,'count_winner':count_winner,'count_jackpot':count_jackpot,
+                        'most_jackpot_winners':most_jackpot_winners,'most_winners':most_winners,'biggest_win':biggest_win,
+                        'smallest_jackpot':smallest_jackpot,'least_winners':least_winners,'first_draw':first_draw,'last_draw':last_draw,
+                        'draw_count':draw_count}
+    return interesting_values
 
 def __barplot():
     #TODO
@@ -92,9 +125,11 @@ def __barplot():
 def data_analysis(dt_start, dt_end):
     res = search_between(dt_start,dt_end)
     data = __data_from_query(res)
+    if data['date'] == []:
+        return {}
+    interesting_data = __interesting_values(data)
     number_freq = __primary_stats(data)
     __heatmap(number_freq)
     __barplot() 
 
-    1+1
-    return 1
+    return interesting_data

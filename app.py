@@ -11,41 +11,49 @@ app = Flask(__name__)
 app.config['SECRET_KEY']='keepitsecretkeepitsafe'
 load_dotenv()
 
+data = {}
+
 @app.route("/")
 def welcome():
-    defdate1 = datetime.datetime.strftime(datetime.datetime.now()-datetime.timedelta(weeks=1),'%Y-%m-%d')
-    defdate2 = datetime.datetime.strftime(datetime.datetime.now(),'%Y-%m-%d')
-    return render_template("index.html", title="Welcome", defdate1 = defdate1, defdate2=defdate2)
+    global data
+    print("AKJNSDNKJASDKJNASKJNDSAKJNDKJNASKJNDLASKJNDKJNASKJNDAKJNSDKJNASKJNDNAKJSKNDJ")
+    if 'dt_start' not in data:
+        data['dt_start'] = datetime.datetime.strftime(datetime.datetime.now()-datetime.timedelta(weeks=1),'%Y-%m-%d')
+    if 'dt_end' not in data:
+        data['dt_end'] = datetime.datetime.strftime(datetime.datetime.now(),'%Y-%m-%d')
+    
+    title = 'Data analysed' if 'analysis' in session else 'Welcome'
+    return render_template("index.html", title=title, data = data)
 
-@app.route("/test1")
-def test1():
-    return render_template("test1.html", title="Testing1")
-
-@app.route("/test2")
-def test2():
-    defdate1 = datetime.datetime.strftime(datetime.datetime.now()-datetime.timedelta(weeks=1),'%Y-%m-%d')
-    defdate2 = datetime.datetime.strftime(datetime.datetime.now(),'%Y-%m-%d')
-    return render_template("test2.html", title="Testing2", defdate1 = defdate1, defdate2=defdate2)
 
 @app.route("/getdata", methods=["POST"])
 def getdata():
+    global data
+    startdate = datetime.datetime.strptime(request.form['startdate'],'%Y-%m-%d')
+    enddate = datetime.datetime.strptime(request.form['enddate'],'%Y-%m-%d')
+    if startdate > enddate:
+        startdate,enddate = enddate,startdate
+    data['dt_start'] = datetime.datetime.strftime(startdate,'%Y-%m-%d')
+    data['dt_end'] = datetime.datetime.strftime(enddate,'%Y-%m-%d')
     if ('loggedin' in session) & ('sync' in request.form):
-        startdate = datetime.datetime.strptime(request.form['startdate'],'%Y-%m-%d')
-        enddate = datetime.datetime.strptime(request.form['enddate'],'%Y-%m-%d')
-        if startdate > enddate:
-            startdate,enddate = enddate,startdate
         dfv.handle_data(startdate,enddate)
-        #return render_template("data.html", title="Testing2", defdate1 = startdate.strftime('%Y-%m-%d'),defdate2 = enddate.strftime('%Y-%m-%d'))
+    elif ('download' in request.form):
+        #TODO
+        pass
     return redirect("/data")
+
 @app.route("/login")
 def login():
     return render_template("login.html", title="Login")
 
 @app.route("/data")
-def data():
-    defdate1 = datetime.datetime.strftime(datetime.datetime.now()-datetime.timedelta(weeks=1),'%Y-%m-%d')
-    defdate2 = datetime.datetime.strftime(datetime.datetime.now(),'%Y-%m-%d')
-    return render_template("data.html", title="Data", defdate1 = defdate1, defdate2=defdate2)
+def datafunc():
+    global data
+    if 'dt_start' not in data:
+        data['dt_start'] = datetime.datetime.strftime(datetime.datetime.now()-datetime.timedelta(weeks=1),'%Y-%m-%d')
+    if 'dt_end' not in data:
+        data['dt_end'] = datetime.datetime.strftime(datetime.datetime.now(),'%Y-%m-%d')
+    return render_template("data.html", title="Data", data=data)
 
 @app.route("/loginsubmit", methods=["POST", 'GET'])
 def loginsubmit():
@@ -69,15 +77,23 @@ def logoutsubmit():
 
 @app.route("/analyse", methods=["POST"])
 def analyse():
-    print("WIWKWIWIDAIDSKJNSADKNJASDKJN")
     if 'clear' in request.form:
-        
         session.pop('analysis',None)
     else:
+        global data
         startdate = datetime.datetime.strptime(request.form['startdate'],'%Y-%m-%d')
         enddate = datetime.datetime.strptime(request.form['enddate'],'%Y-%m-%d')
-        if data_analysis(startdate, enddate):
-            session['analysis'] = True
+        if startdate > enddate:
+            startdate,enddate = enddate,startdate
+        print("WOLOLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+        print(data['dt_start'])
+        data['dt_start'] = datetime.datetime.strftime(startdate,'%Y-%m-%d')
+        data['dt_end'] = datetime.datetime.strftime(enddate,'%Y-%m-%d')
+        data_analysed = data_analysis(startdate, enddate)
+        if data_analysed != {}:
+            session['analysis'] = True 
+            for key in data_analysed.keys():
+                data[key] = data_analysed[key]
     return redirect("/")
 
 

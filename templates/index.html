@@ -12,12 +12,12 @@
     <div class="row justify-content-md-start">
         <div class="col-lg-2">
             <label for="startdate" class="form-label">Start date</label>
-            <input name="startdate" type="date" class="form-control datepicker" id="startdate" value={{ defdate1 }}
+            <input name="startdate" type="date" class="form-control datepicker" id="startdate" value={{ data['dt_start'] }}
                 min="1971-01-01">
         </div>
         <div class="col-lg-2">
             <label for="enddate" class="form-label">End date</label>
-            <input name="enddate" type="date" class="form-control datepicker" id="enddate" value={{ defdate2 }}
+            <input name="enddate" type="date" class="form-control datepicker" id="enddate" value={{ data['dt_end'] }}
                 min="1971-01-01">
         </div>
     </div>
@@ -25,19 +25,41 @@
     <div class="row justify-content-md-start">
         <div class="col-md-4">
             <button name="select" type="submit" class="btn btn-primary" value="select">Select</button>
-
-            <button name="select" type="submit" class="btn btn-primary" value="clear">Clear</button>
+            {% if ('analysis' in session) %}
+            <button name="clear" type="submit" class="btn btn-primary" value="clear">Clear</button>
+            {% endif %}
         </div>
 
     </div>
 </form>
-{% if 'analysis' in session %}
+{% if ('analysis' in session) and ('sum_all' in data) %}
+
+<h2>Analysis of draws {{ data['first_draw'] }} <span>&#8212;</span> {{ data['last_draw'] }} </h2>
+
 <div class="row justify-content-md-start">
-    <h2>Lotto number frequencies</h2>
+    <h3>Lotto number frequencies</h2>
     <figure>
     <img src="static/pictures/a_number_frequencies.svg" style="max-width: 50%;height: auto;" alt="Lottery stuff">
     <figcaption style="max-width: 50%">Fig.1 - Frequencies of numbers with other numbers in winning lottery lines. The diagonal shows how many times each number has been in the winning line.</figcaption>
 </figure>
 </div>
+
+<br>
+<br>
+<h3>Interesting values during the selected time period</h2>
+<p>Summed value of all the winning tiers during the selected time period is <b>{{ "{:,.2f}".format(data['sum_all']).replace(',',' ') }} €</b></p>
+<p>Summed value of the jackpots is <b>{{ "{:,.2f}".format(data['sum_jackpot']).replace(',',' ') }} €</b></p>
+<p>The difference between the previous two is <b>{{ "{:,.2f}".format(data['sum_all']-data['sum_jackpot']).replace(',',' ') }} €</b> and the ratio is <b>{{ "{:,.2f}".format(data['sum_jackpot']/data['sum_all']).replace(',',' ') }}</b></p>
+<p>In total, there has been <b>{{ "{:,d}".format(data['count_winner']).replace(',',' ') }}</b> winners when including all of the prize tiers</p>
+<p>Everyone would get  <b>{{ "{:,.2f}".format(data['sum_jackpot']/data['count_winner']).replace(',',' ') }} €</b>, if the prize money were to be distributed eavenly</p>
+<p>There has been <b>{{ "{:,d}".format(data['count_jackpot']).replace(',',' ') }}</b> jackpot winners</p>
+<p>Every jackpot winner would get <b>{{ "{:,.2f}".format(data['sum_jackpot']/data['count_jackpot']).replace(',',' ') }} €</b> if the jackpots would be divided equally</p>
+<p>In a singe draw the greatest amount of winners has been <b>{{ "{:,d}".format(data['most_winners']).replace(',',' ') }}</b></p>
+<p>The greatest amount of jackpot winners has been <b>{{ "{:,d}".format(data['most_jackpot_winners']).replace(',',' ') }}</b> in a single draw</p>
+<p>The biggest win during the searched time period has been <b>{{ "{:,.2f}".format(data['biggest_win']).replace(',',' ') }} €</b></p>
+<p>The smallest jackpot win per person has been <b>{{ "{:,.2f}".format(data['smallest_jackpot']).replace(',',' ') }} €</b></p>
+<p>The least amount of winners during a draw has been <b>{{ "{:,d}".format(data['least_winners']).replace(',',' ') }}</b></p>
+
+
 {% endif %}
 {% endblock body %}
