@@ -217,3 +217,6 @@ test.py
 
 # pictures that will be generated
 static/pictures/*
+
+# do not take database.db file
+database.db
