@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import datetime
 from database.operations import search_between
-from analysis import aplot
 
 cpi = np.genfromtxt(fname='elinkustannusindeksi.csv',skip_header=3, delimiter=';',converters={0: lambda x: float(x.decode('utf-8').strip('"'))})
 euro_conversion = 5.94573
@@ -61,7 +60,7 @@ def __heatmap(datamat):
     numbers = [f"{x+1}" for x in range(40)]
 
     fig, ax = plt.subplots()
-    fig.set_size_inches(16,16)
+    fig.set_size_inches(10,10)
     im = ax.imshow(datamat,cmap='YlGn')
     cbar = ax.figure.colorbar(im, ax=ax)
     cbar.ax.set_ylabel('Counts', rotation=-90, va="bottom")
@@ -76,14 +75,14 @@ def __heatmap(datamat):
              rotation_mode="anchor")
 
     # Loop over data dimensions and create text annotations.
-    for i in range(len(numbers)):
-        for j in range(len(numbers)):
-            text = ax.text(j, i, datamat[i, j],
-                        ha="center", va="center", color="w")
+    # for i in range(len(numbers)):
+    #     for j in range(len(numbers)):
+    #         text = ax.text(j, i, datamat[i, j],
+    #                     ha="center", va="center", color="w")
 
     ax.set_title("Lottery number frequencies with other numbers")
     fig.tight_layout()
-    plt.savefig('static/pictures/number_frequencies.svg',format='svg')
+    plt.savefig('static/pictures/a_number_frequencies.svg',format='svg')
     return True
 
 def __barplot():

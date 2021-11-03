@@ -5,7 +5,7 @@
 
 {% block body %}
 
-<h1>Analyse lottery data</h1>
+<h1>Analyse Finnish lottery data</h1>
 
 <form method="post" action="/analyse">
 
@@ -29,5 +29,13 @@
 
     </div>
 </form>
-
+{% if 'analysis' in session %}
+<div class="row justify-content-md-start">
+    <h2>Lotto number frequencies</h2>
+    <figure>
+    <img src="static/pictures/a_number_frequencies.svg" style="max-width: 50%;height: auto;" alt="Lottery stuff">
+    <figcaption style="max-width: 50%">Fig.1 - Frequencies of numbers with other numbers in winning lottery lines. The diagonal shows how many times each number has been in the winning line.</figcaption>
+</figure>
+</div>
+{% endif %}
 {% endblock body %}
