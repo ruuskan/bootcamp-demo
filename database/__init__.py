@@ -30,5 +30,7 @@ class Draw(Base):
         
 
 DATABASE_URL = os.environ['DATABASE_URL']
+if 'postgres:/' in DATABASE_URL:
+    DATABASE_URL = DATABASE_URL.replace("://", "ql://", 1)
 db = create_engine(DATABASE_URL)
 Session = sessionmaker(bind=db)

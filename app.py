@@ -69,10 +69,15 @@ def logoutsubmit():
 
 @app.route("/analyse", methods=["POST"])
 def analyse():
-    startdate = datetime.datetime.strptime(request.form['startdate'],'%Y-%m-%d')
-    enddate = datetime.datetime.strptime(request.form['enddate'],'%Y-%m-%d')
-    if data_analysis(startdate, enddate):
-        session['analysis'] = True
+    print("WIWKWIWIDAIDSKJNSADKNJASDKJN")
+    if 'clear' in request.form:
+        
+        session.pop('analysis',None)
+    else:
+        startdate = datetime.datetime.strptime(request.form['startdate'],'%Y-%m-%d')
+        enddate = datetime.datetime.strptime(request.form['enddate'],'%Y-%m-%d')
+        if data_analysis(startdate, enddate):
+            session['analysis'] = True
     return redirect("/")
 
 
