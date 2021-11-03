@@ -12,6 +12,7 @@ requests = "*"
 matplotlib = "*"
 gunicorn = "*"
 pdoc3 = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
