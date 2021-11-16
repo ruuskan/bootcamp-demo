@@ -159,6 +159,8 @@ def __interesting_values(data):
         for k in range(len(data['share_count'][i])):
             sum_all += data['share_amount'][i][k]/100 * data['share_count'][i][k]
             count_winner += data['share_count'][i][k]
+    smallest_jackpot = 0 if smallest_jackpot >= 199999999999 else smallest_jackpot
+    least_winners = 0 if least_winners >= 199999999999 else least_winners
     interesting_values={'sum_all':sum_all,'sum_jackpot':sum_jackpot,'count_winner':count_winner,'count_jackpot':count_jackpot,
                         'most_jackpot_winners':most_jackpot_winners,'most_winners':most_winners,'biggest_win':biggest_win,
                         'smallest_jackpot':smallest_jackpot,'least_winners':least_winners,'first_draw':first_draw,'last_draw':last_draw,
