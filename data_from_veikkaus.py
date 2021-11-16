@@ -51,6 +51,13 @@ def __is_data_available(sd,ed):
         dt = dt + datetime.timedelta(weeks=1)
     res = search_between(sd,ed)
     for row in res:
-        if (row.date.isocalendar().week,row.date.isocalendar().year) in data_needed:
-            data_needed.pop(data_needed.index((row.date.isocalendar().week,row.date.isocalendar().year)))
+        # HOTFIX
+        dt = row.date
+        if type(dt) != str:
+            if (row.date.isocalendar().week,row.date.isocalendar().year) in data_needed:
+                data_needed.pop(data_needed.index((row.date.isocalendar().week,row.date.isocalendar().year)))
+        else:
+            dt = datetime.datetime.strptime(dt,'%Y-%m-%d %H:%M:%S.%f')
+            if (dt.isocalendar().week,dt.isocalendar().year) in data_needed:
+                data_needed.pop(data_needed.index((dt.isocalendar().week,dt.isocalendar().year)))
     return data_needed

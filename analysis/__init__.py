@@ -145,8 +145,15 @@ def __interesting_values(data):
     biggest_win = 0
     smallest_jackpot = 999999999999
     least_winners = 999999999999
-    first_draw = datetime.datetime.strftime(min(data['date']),'%d/%m/%Y')
-    last_draw = datetime.datetime.strftime(max(data['date']),'%d/%m/%Y')
+
+    #HOTFIX
+    if type(min(data['date'])) != str:
+        first_draw = datetime.datetime.strftime(min(data['date']),'%d/%m/%Y')
+        last_draw = datetime.datetime.strftime(max(data['date']),'%d/%m/%Y')
+    else:
+        first_draw = datetime.datetime.strftime(datetime.datetime.strptime(min(data['date']),'%Y-%m-%d %H:%M:%S.%f'),'%d/%m/%Y')
+        last_draw = datetime.datetime.strftime(datetime.datetime.strptime(max(data['date']),'%Y-%m-%d %H:%M:%S.%f'),'%d/%m/%Y')
+    
     draw_count = len(data['date'])
     for i in range(len(data['share_count'])):
         sum_jackpot += data['share_amount'][i][0]/100

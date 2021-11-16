@@ -1,5 +1,5 @@
 from database import Draw, Session
-from sqlalchemy import or_
+from sqlalchemy import or_, DateTime
 
 def __get_session():
     return Session()
@@ -44,7 +44,12 @@ def search_between(startdate, enddate):
     startdate:  datetime.datetime type time object specifying starting date for the query
     enddate:    datetime.datetime type time object specifying ending date for the query
     """
-    return __get_session().query(Draw).filter(Draw.date >= startdate,Draw.date <= enddate)
+    # HOTFIX
+    if 'sqlite' in __get_session().bind.name:
+        response = __get_session().query(Draw).filter(Draw.date >= startdate, Draw.date <= enddate)
+    else:
+        response = __get_session().query(Draw).filter(Draw.date.cast(DateTime) >= startdate, Draw.date.cast(DateTime) <= enddate)
+    return response
 
 
 
@@ -56,3 +61,13 @@ def get_all():
     
     """
     return __get_session().query(Draw).all()
+
+
+def get_id(id):
+    """
+    Returns sqlalchemy query object
+
+    Query specific id.
+    
+    """
+    return __get_session().query(Draw).filter(Draw.id == id)
