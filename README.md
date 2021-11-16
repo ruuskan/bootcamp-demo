@@ -38,7 +38,9 @@ You can **select** a time period for data analysis in the **main** tab.
 
 ## Deployment
 
-~~Application has support for Heroku deployment (gunicorn).~~
+Application has support for Heroku deployment (gunicorn).
+
+Demo has been deployed: https://lottoag.herokuapp.com/
   
 ## Author
 
