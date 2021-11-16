@@ -34,6 +34,8 @@ After running the app.py go to **localhost:5000**
 
 If the database is empty, log in with your credentials set in .env, head to **Data** tab and **Sync** the desired time period into your database.
 
+You can **select** a time period for data analysis in the **main** tab.
+
 ## Deployment
 
 ~~Application has support for Heroku deployment (gunicorn).~~
